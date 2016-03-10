@@ -26,12 +26,14 @@
         var content = $("#content").val();
 
         if($.trim(name)==""){
-            alert("昵称不能为空！");
+            $("#name").attr("value","");
+            $("#name").focus();
             return;
         }
 
          if($.trim(content)==""){
-            alert("内容不能为空！");
+            $("#content").attr("value","");
+            $("#content").focus();               
             return;
         }       
 
@@ -41,6 +43,8 @@
         chat.set("content", $("#content").val());
         chat.save(null, {
           success: function(object) {           
+            $("#content").attr("value","");
+            $("#content").focus();            
           },
           error: function(model, error) {            
           }
