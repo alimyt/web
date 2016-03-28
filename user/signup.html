@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset='utf-8'>
+
+	<title>alimyt.com</title>
+
+	<!-- jQuery //-->
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+
+	<!-- Bmob Load //-->
+	<script type="text/javascript" src="/js/bmob-min.js"></script>
+
+	<!-- Bmob Init //-->
+	<script type="text/javascript">
+	Bmob.initialize("4c6dd7eed26e4d1ed7877d6093b299c1", "d5c309d52fd9904e1f85e4f5d5dd72f5");
+	</script>
+
+	<script type="text/javascript">
+	var funcSignup = function () {
+		var user = new Bmob.User();
+
+		$('#idStdOut').text('');
+		$('#idStdErr').text('');
+
+		user.set('username', $('#idUserNameEmail').val());
+		user.set('password', $('#idPassword1').val());
+		user.set('email', $('#idUserNameEmail').val());
+
+		user.signUp(null, {
+			success: function(user) {
+				$('#idStdOut').text ('注册成功! 请打开电子邮箱，并确认本站发送的注册邮件。');
+				console.log('注册成功! 请打开电子邮箱，并确认本站发送的注册邮件。');
+			},
+			error: function(user, error) {
+				$('#idStdErr').text ('注册失败! 错误码:' + error.code + ' 错误原因:' + error.message);
+				console.log('注册失败! 错误码:' + error.code + " 错误原因:" + error.message);
+			}
+		});
+	}
+	</script>	
+
+</head>
+<body>
+
+<form>
+<ul>
+<li>用户名: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="40" />（请输入电子邮箱，以便于接收注册确认邮件）</li>
+<li>新密码: <input type="password" name="Password1" id="idPassword1" size="20" /></li>
+<li><input type="button" name="SignupBtn" id="idSignupBtn" value="注册" onclick="funcSignup()" /></li>
+</ul>
+</form>
+
+<!-- stdout logging //-->
+<hr>
+<p id="idStdOut" style="color:blue; background-color: yellow"></p>
+
+<!-- stderr logging //-->
+<hr>
+<p id="idStdErr" style="color:red; background-color: yellow"></p>
+
+</body>
+</html>
