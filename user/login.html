@@ -3,14 +3,8 @@
 <head>
 	<meta charset='utf-8'>
 	<title>alimyt.com</title>
-
-	<!-- jQuery //-->
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
-
-	<!-- Bmob Load //-->
 	<script type="text/javascript" src="/js/bmob-min.js"></script>
-
-	<!-- Bmob Init //-->
 	<script type="text/javascript">
 	Bmob.initialize("4c6dd7eed26e4d1ed7877d6093b299c1", "d5c309d52fd9904e1f85e4f5d5dd72f5");
 	</script>
@@ -18,13 +12,25 @@
 	<!-- Page Load Done //-->
 	<script type="text/javascript">
 	$(function() {
-		var strUser = localStorage.strUser;
+		var strUser = undefined;
+		var currentUser = Bmob.User.current();
+		if (currentUser) {
+			strUser = currentUser.get('username');
+			$('#idStdOut').text (strUser + '当前已登录，无须再次登录，直接进入聊天室即可。');
+		}
+
 		if (strUser) {
 			$('#idUserNameEmail').val (strUser);
 			$('#idPassword1').focus();
 		} else {
-			$('#idUserNameEmail').focus();
-		}
+			strUser = localStorage.strUser;
+			if (strUser) {
+				$('#idUserNameEmail').val (strUser);
+				$('#idPassword1').focus();
+			} else {
+				$('#idUserNameEmail').focus();
+			}
+		}		
 	});
 	</script>
 
@@ -56,9 +62,9 @@
 				$('#idStdOut').text (strUser + '登录成功!');
 				$('#idStdErr').text ('');
 				$('#idPassword1').val('');
-				
-				localStorage.strUser = strUser;
 
+				// 如果以后登出，则为了方便用户，这里记住用户名（邮箱），用户不必再输入用户名了
+				localStorage.strUser = strUser;
 			},
 			error: function(user, error) {
 				$('#idStdOut').text ('');
