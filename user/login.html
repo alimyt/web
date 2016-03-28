@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>alimyt.com</title>
+
+	<!-- jQuery //-->
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+
+	<!-- Bmob Load //-->
+	<script type="text/javascript" src="/js/bmob-min.js"></script>
+
+	<!-- Bmob Init //-->
+	<script type="text/javascript">
+	Bmob.initialize("4c6dd7eed26e4d1ed7877d6093b299c1", "d5c309d52fd9904e1f85e4f5d5dd72f5");
+	</script>
+
+	<!-- Page Load Done //-->
+	<script type="text/javascript">
+	$(function() {
+		var strUser = localStorage.strUser;
+		if (strUser) {
+			$('#idUserNameEmail').val (strUser);
+			$('#idPassword1').focus();
+		} else {
+			$('#idUserNameEmail').focus();
+		}
+	});
+	</script>
+
+	<!-- Login //-->
+	<script type="text/javascript">
+	function funcLogin () {
+		var strUser = $('#idUserNameEmail').val();
+		var strPass = $('#idPassword1').val();
+
+		$('#idStdOut').text ('');
+		$('#idStdErr').text ('');
+
+		if (!strUser) {
+			$('#idStdErr').text ('帐户名不可以为空!');
+			$('#idUserNameEmail').focus();
+			return;
+		}
+
+		if (!strPass) {
+			$('#idStdErr').text ('密码不可以为空!');
+			$('#idPassword1').focus();
+			return;
+		}
+
+		$('#idStdOut').text ('正在以' + strUser + '登录，请耐心等待......');
+
+		Bmob.User.logIn(strUser, strPass, {
+			success: function(user) {
+				$('#idStdOut').text (strUser + '登录成功!');
+				$('#idStdErr').text ('');
+				$('#idPassword1').val('');
+				
+				localStorage.strUser = strUser;
+
+			},
+			error: function(user, error) {
+				$('#idStdOut').text ('');
+				$('#idStdErr').text ('登录失败! 原因: ' + error.message + '//' + error.code);
+				$('#idPassword1').val('');
+				$('#idPassword1').focus();
+			}
+		});
+	}
+	</script>
+
+	<!-- Logout //-->
+	<script type="text/javascript">
+	function funcLogout () {
+		var currentUser = Bmob.User.current();
+		if (!currentUser) {
+			$('#idStdOut').text ('');
+			$('#idStdErr').text ('您尚未登录，无须退出');	
+			$('#idPassword1').focus();	
+			return;
+		}
+
+		strUser = currentUser.get('username');
+
+		// LOGOUT
+		Bmob.User.logOut();
+
+		// 再次检查当前是否
+		nowUser = Bmob.User.current();
+		if (nowUser) {
+			$('#idStdOut').text ('');
+			$('#idStdErr').text ('退出登录失败');
+		} else {
+			$('#idStdOut').text (strUser +'已退出登录');
+			$('#idStdErr').text ('');
+			$('#idPassword1').focus();
+		}
+	}
+	</script>
+
+</head>
+<body>
+
+<!-- login form //-->
+<form>
+<ul>
+<li>帐户: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="30" />（注：您之前使用电子邮箱作为帐户名注册的）</li>
+<li>密码: <input type="password" name="Password1" id="idPassword1" size="30" /></li>
+<li><input type="button" name="LoginBtn" id="idLoginBtn" value="登录" onclick="funcLogin()" /></li>
+<li><input type="button" name="LogoutBtn" id="idLogoutBnt" value="退出" onclick="funcLogout()" /></li>
+</ul>
+</form>
+
+<!-- stdout logging //-->
+<p id="idStdOut" style="color:blue; background-color: yellow"></p>
+
+<!-- stderr logging //-->
+<p id="idStdErr" style="color:red; background-color: yellow"></p>
+
+</body>
+</html>

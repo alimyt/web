@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset='utf-8'>
-
 	<title>alimyt.com</title>
 
 	<!-- jQuery //-->
@@ -17,12 +15,14 @@
 	Bmob.initialize("4c6dd7eed26e4d1ed7877d6093b299c1", "d5c309d52fd9904e1f85e4f5d5dd72f5");
 	</script>
 
+	<!-- Page Load Done //-->
 	<script type="text/javascript">
 	$(function() {
 		$('#idUserNameEmail').focus();
 	});
 	</script>
 
+	<!-- Sign Up //-->
 	<script type="text/javascript">
 	var funcSignup = function () {
 		var user = new Bmob.User();
@@ -50,14 +50,10 @@
 			success: function(user) {
 				$('#idStdOut').text ('注册成功! 请打开电子邮箱，并确认本站发送的注册邮件。');
 				$('#idStdErr').text ('');
-				console.log('OK');
 			},
 			error: function(user, error) {
 				$('#idStdOut').text ('');
-				$('#idStdErr').text ('注册失败! 错误码:' + error.code + ' ' +
-									'注册失败! 错误原因:' + error.message);
-				console.log('ERROR.CODE:' + error.code);
-				console.log('ERROR.MESSAGE:' + error.message);
+				$('#idStdErr').text ('注册失败! 失败原因:' + error.message + '//' + error.code);
 			}
 		});
 
@@ -67,11 +63,12 @@
 </head>
 <body>
 
+<!-- input form //-->
 <form>
 <ul>
-<li>用户名: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="30" />（请输入电子邮箱，以便于接收注册确认邮件）</li>
-<li>新密码: <input type="password" name="Password1" id="idPassword1" size="30" /></li>
-<li>新密码: <input type="password" name="Password2" id="idPassword2" size="30" />（两次输入密码必须相同）</li>
+<li>帐户: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="30" />（请输入电子邮箱，以便于接收注册确认邮件）</li>
+<li>密码: <input type="password" name="Password1" id="idPassword1" size="30" /></li>
+<li>密码: <input type="password" name="Password2" id="idPassword2" size="30" />（两次输入密码必须相同）</li>
 <li><input type="button" name="SignupBtn" id="idSignupBtn" value="注册" onclick="funcSignup()" /></li>
 </ul>
 </form>
