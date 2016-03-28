@@ -18,26 +18,49 @@
 	</script>
 
 	<script type="text/javascript">
+	$(function() {
+		$('#idUserNameEmail').focus();
+	});
+	</script>
+
+	<script type="text/javascript">
 	var funcSignup = function () {
 		var user = new Bmob.User();
+		var strPass1 = $('#idPassword1').val();
+		var strPass2 = $('#idPassword2').val();
 
 		$('#idStdOut').text('');
 		$('#idStdErr').text('');
+
+		if (strPass1 !== strPass2){
+			$('#idStdErr').text ('两次输入密码必须相同，请重新输入');
+			$('#idPassword1').val('');
+			$('#idPassword2').val('');
+			$('#idPassword1').focus();
+			return;
+		}
 
 		user.set('username', $('#idUserNameEmail').val());
 		user.set('password', $('#idPassword1').val());
 		user.set('email', $('#idUserNameEmail').val());
 
-		user.signUp(null, {
+		$('#idStdOut').text ('正在注册，请耐心等待......');
+
+		user.signUp (null, {
 			success: function(user) {
 				$('#idStdOut').text ('注册成功! 请打开电子邮箱，并确认本站发送的注册邮件。');
-				console.log('注册成功! 请打开电子邮箱，并确认本站发送的注册邮件。');
+				$('#idStdErr').text ('');
+				console.log('OK');
 			},
 			error: function(user, error) {
-				$('#idStdErr').text ('注册失败! 错误码:' + error.code + ' 错误原因:' + error.message);
-				console.log('注册失败! 错误码:' + error.code + " 错误原因:" + error.message);
+				$('#idStdOut').text ('');
+				$('#idStdErr').text ('注册失败! 错误码:' + error.code + ' ' +
+									'注册失败! 错误原因:' + error.message);
+				console.log('ERROR.CODE:' + error.code);
+				console.log('ERROR.MESSAGE:' + error.message);
 			}
 		});
+
 	}
 	</script>	
 
@@ -46,18 +69,17 @@
 
 <form>
 <ul>
-<li>用户名: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="40" />（请输入电子邮箱，以便于接收注册确认邮件）</li>
-<li>新密码: <input type="password" name="Password1" id="idPassword1" size="20" /></li>
+<li>用户名: <input type="text" name="UserNameEmail" id="idUserNameEmail" size="30" />（请输入电子邮箱，以便于接收注册确认邮件）</li>
+<li>新密码: <input type="password" name="Password1" id="idPassword1" size="30" /></li>
+<li>新密码: <input type="password" name="Password2" id="idPassword2" size="30" />（两次输入密码必须相同）</li>
 <li><input type="button" name="SignupBtn" id="idSignupBtn" value="注册" onclick="funcSignup()" /></li>
 </ul>
 </form>
 
 <!-- stdout logging //-->
-<hr>
 <p id="idStdOut" style="color:blue; background-color: yellow"></p>
 
 <!-- stderr logging //-->
-<hr>
 <p id="idStdErr" style="color:red; background-color: yellow"></p>
 
 </body>
